@@ -28,6 +28,30 @@ const buttonStyles = tv({
 				"inset-ring-border [--btn-bg:transparent] [--btn-icon:var(--color-muted-fg)] [--btn-outline:var(--color-ring)] [--btn-overlay:var(--color-muted)] [--btn-ring:var(--color-ring)]/20",
 			plain:
 				"inset-ring-transparent [--btn-bg:transparent] [--btn-icon:var(--color-muted-fg)] [--btn-outline:var(--color-ring)] [--btn-overlay:var(--color-muted)] [--btn-ring:var(--color-ring)]/20",
+			glass: [
+				"[--btn-bg:transparent] [--btn-fg:var(--color-fg)] [--btn-icon:var(--color-fg)] [--btn-outline:transparent] [--btn-ring:transparent]",
+				"inset-ring-0 isolate overflow-hidden",
+				// Liquid Glass System
+				"bg-[rgba(255,255,255,0.05)] backdrop-blur-[12px]",
+				"border border-[rgba(255,255,255,0.15)]",
+				"shadow-[0_0_0_1px_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.15)]",
+				// Inner gradient highlight
+				"before:absolute before:inset-0 before:-z-10",
+				"before:bg-[linear-gradient(135deg,rgba(255,255,255,0.12)_0%,transparent_60%)]",
+				"before:opacity-60",
+				// Top edge glow
+				"after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit]",
+				"after:bg-gradient-to-b after:from-white/25 after:via-transparent after:to-transparent",
+				// Noise texture
+				"viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E\")] [background-image:url(\"data:image/svg+xml,%3Csvg",
+				// Hover states
+				"hover:shadow-[0_0_0_1px_rgba(255,255,255,0.2),0_4px_16px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.2)]",
+				"hover:border-[rgba(255,255,255,0.25)]",
+				"hover:before:opacity-100",
+				// Pressed state
+				"pressed:scale-[0.98] active:scale-95",
+				"transition-all duration-300 ease-out",
+			],
 		},
 		size: {
 			xs: [
@@ -107,11 +131,11 @@ const Button = ({
 			)}
 		>
 			{(values) => (
-				<>
+				<span className="relative z-10">
 					{typeof props.children === "function"
 						? props.children(values)
 						: props.children}
-				</>
+				</span>
 			)}
 		</ButtonPrimitive>
 	)

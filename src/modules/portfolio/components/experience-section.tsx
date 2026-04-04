@@ -1,3 +1,4 @@
+import { LiquidGlass } from "~/shared/components/ui"
 import { cn } from "~/shared/utils"
 import { PORTFOLIO_DATA } from "../portfolio-constants"
 
@@ -21,9 +22,11 @@ export function ExperienceSection() {
 				{/* Timeline */}
 				<div className="flex flex-col gap-6">
 					{experience.map((job) => (
-						<div
+						<LiquidGlass
 							key={job.id}
-							className="flex flex-col gap-10 rounded-2xl bg-white/5 p-6"
+							variant="premium"
+							rounded="2xl"
+							className="flex flex-col gap-10 p-6"
 						>
 							{/* Header */}
 							<div className="flex flex-col gap-2 opacity-80">
@@ -51,7 +54,7 @@ export function ExperienceSection() {
 									</p>
 								))}
 							</div>
-						</div>
+						</LiquidGlass>
 					))}
 				</div>
 			</div>

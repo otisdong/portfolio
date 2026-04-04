@@ -1,4 +1,5 @@
 import { cn } from "~/shared/utils"
+import { LiquidGlass } from "../components/ui"
 
 interface PortfolioLayoutProps {
 	children: React.ReactNode
@@ -10,11 +11,11 @@ export function PortfolioLayout({ children }: PortfolioLayoutProps) {
 			{/* Header */}
 			<header className="fixed top-0 right-0 left-0 z-50 animate-[fade-in-up_0.6s_ease-out] px-6 py-4 backdrop-blur-sm sm:px-12 md:px-24 lg:px-60 xl:px-80">
 				<div className="flex items-center justify-between">
-					<div className="rounded-xl bg-white/5 px-3 py-2 sm:px-4 sm:py-3">
+					<LiquidGlass variant="default" className="px-3 py-2 sm:px-4 sm:py-3">
 						<span className="font-medium text-sm text-white sm:text-base md:text-lg">
 							Portfolio UI UX Designer
 						</span>
-					</div>
+					</LiquidGlass>
 
 					<button
 						type="button"

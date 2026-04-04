@@ -1,3 +1,4 @@
+import { LiquidGlass } from "~/shared/components/ui"
 import { PORTFOLIO_DATA } from "../portfolio-constants"
 
 export function ContactSection() {
@@ -15,14 +16,18 @@ export function ContactSection() {
 			</div>
 
 			{/* Contact Card */}
-			<div className="mx-auto flex w-full max-w-2xl flex-col items-center gap-6 rounded-2xl bg-white/5 p-6 text-center sm:p-8 md:p-10">
+			<LiquidGlass
+				variant="frosted"
+				rounded="2xl"
+				className="mx-auto flex w-full max-w-2xl flex-col items-center gap-6 p-6 text-center sm:p-8 md:p-10"
+			>
 				<p className="font-medium text-lg text-white leading-8 sm:text-xl md:text-2xl">
 					{personal.email}
 				</p>
 				<p className="font-medium text-lg text-white leading-8 sm:text-xl md:text-2xl">
 					{personal.phone.join(" or ")}
 				</p>
-			</div>
+			</LiquidGlass>
 		</section>
 	)
 }

@@ -12,7 +12,7 @@ export function ThemeToggle() {
 	return (
 		<Button
 			onClick={toggleTheme}
-			intent="plain"
+			intent="glass"
 			size="sm"
 			className="relative"
 			aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}

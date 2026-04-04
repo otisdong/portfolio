@@ -1,3 +1,4 @@
+import { LiquidGlass } from "~/shared/components/ui"
 import { cn } from "~/shared/utils"
 import { PORTFOLIO_DATA } from "../portfolio-constants"
 
@@ -27,9 +28,11 @@ export function ProductsSection() {
 				{/* Products Grid */}
 				<div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
 					{products.map((product) => (
-						<div
+						<LiquidGlass
 							key={product.id}
-							className="flex flex-col gap-10 rounded-2xl bg-white/5 p-6"
+							variant="premium"
+							rounded="2xl"
+							className="flex flex-col gap-10 p-6"
 						>
 							{/* Product Image */}
 							<div className="h-[480px] overflow-hidden rounded-xl">
@@ -53,7 +56,7 @@ export function ProductsSection() {
 									{product.description}
 								</p>
 							</div>
-						</div>
+						</LiquidGlass>
 					))}
 				</div>
 			</div>

@@ -1,3 +1,4 @@
+import { LiquidGlass } from "~/shared/components/ui"
 import { cn } from "~/shared/utils"
 import { PORTFOLIO_DATA } from "../portfolio-constants"
 
@@ -74,9 +75,9 @@ interface SkillTagProps {
 
 function SkillTag({ children }: SkillTagProps) {
 	return (
-		<div className="rounded-xl bg-white/5 px-4 py-2">
+		<LiquidGlass variant="subtle" className="px-4 py-2">
 			<span className="font-normal text-white text-xl">{children}</span>
-		</div>
+		</LiquidGlass>
 	)
 }
 
