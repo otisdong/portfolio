@@ -19,10 +19,23 @@ export function ExperienceSection() {
 	// Transform scroll progress to opacity and position for title
 	const titleOpacity = useTransform(
 		scrollYProgress,
-		[0, 0.2, 0.8, 1],
+		[0, 0.1, 0.9, 1],
 		[0, 1, 1, 0],
 	)
-	const titleY = useTransform(scrollYProgress, [0, 0.2, 1], [50, 0, -30])
+
+	// Experience list container animations
+	const listContainerOpacity = useTransform(
+		scrollYProgress,
+		[0, 0.1, 0.9, 1],
+		[0, 1, 1, 0],
+	)
+
+	// Auto-translate experience list content
+	const listContentY = useTransform(
+		scrollYProgress,
+		[0.1, 0.7], // Finish scrolling at 70%
+		[0, -600], // Scroll up 600px
+	)
 
 	return (
 		<section ref={containerRef} className="relative h-[300vh]">
@@ -30,7 +43,7 @@ export function ExperienceSection() {
 				<div className="flex w-full flex-col gap-12 lg:w-152">
 					{/* Title with fade animation */}
 					<motion.h2
-						style={{ opacity: titleOpacity, y: titleY }}
+						style={{ opacity: titleOpacity }}
 						className={cn(
 							"font-medium text-4xl leading-tight sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] xl:leading-22",
 							"bg-linear-to-r from-white via-blue-100 to-blue-300",
@@ -40,17 +53,32 @@ export function ExperienceSection() {
 						Experience
 					</motion.h2>
 
-					{/* Timeline with staggered card animations */}
-					<div className="flex flex-col gap-6">
-						{experience.map((job, index) => (
-							<ExperienceCard
-								key={job.id}
-								job={job}
-								index={index}
-								scrollProgress={scrollYProgress}
-							/>
-						))}
-					</div>
+					{/* Timeline container with overflow and auto-scroll */}
+					<motion.div
+						style={{ opacity: listContainerOpacity }}
+						className="relative flex max-h-[60vh] flex-col overflow-hidden"
+					>
+						{/* Top fade gradient */}
+						<div className="pointer-events-none absolute top-0 left-0 z-10 h-20 w-full bg-gradient-to-b from-[#010619] to-transparent" />
+
+						{/* Scrolling content */}
+						<motion.div
+							style={{ y: listContentY }}
+							className="flex flex-col gap-6"
+						>
+							{experience.map((job, index) => (
+								<ExperienceCard
+									key={job.id}
+									job={job}
+									index={index}
+									scrollProgress={scrollYProgress}
+								/>
+							))}
+						</motion.div>
+
+						{/* Bottom fade gradient */}
+						<div className="pointer-events-none absolute bottom-0 left-0 z-10 h-20 w-full bg-gradient-to-t from-[#010619] to-transparent" />
+					</motion.div>
 				</div>
 				{/* Image Card */}
 				<div className="hidden h-170 w-137 shrink-0 overflow-hidden rounded-2xl bg-[rgba(133,160,245,0.05)] lg:block" />
@@ -66,15 +94,20 @@ interface ExperienceCardProps {
 }
 
 function ExperienceCard({ job, index, scrollProgress }: ExperienceCardProps) {
-	const start = 0.1 + index * 0.15
-	const end = start + 0.3
+	// Stagger timing - each card animates in sequence
+	const start = 0.05 + index * 0.12 // Start earlier, closer timing
+	const end = start + 0.15 // Faster reveal per card
 
 	const cardOpacity = useTransform(
 		scrollProgress,
-		[start, end, 0.9, 1],
+		[start, end, 0.7, 1],
 		[0, 1, 1, 0.8],
 	)
-	const cardY = useTransform(scrollProgress, [start, end], [100, 0])
+	const cardY = useTransform(
+		scrollProgress,
+		[start, end],
+		[80, 0], // Slide up from 80px below
+	)
 
 	return (
 		<motion.div style={{ opacity: cardOpacity, y: cardY }}>
