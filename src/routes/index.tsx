@@ -3,6 +3,7 @@ import {
 	AboutSection,
 	ContactSection,
 	ExperienceSection,
+	FloatingPortrait,
 	HeroSection,
 	ProductsSection,
 } from "~/modules/portfolio"
@@ -41,6 +42,9 @@ function RouteComponent() {
 					))}
 				</div>
 			</div>
+
+			{/* Floating Portrait Animation */}
+			<FloatingPortrait />
 
 			{/* Main Content */}
 			<div className="relative z-10">

@@ -75,8 +75,11 @@ export function ExperienceSection() {
 						</motion.div>
 					</motion.div>
 				</div>
-				{/* Image Card */}
-				<div className="hidden h-170 w-137 shrink-0 overflow-hidden rounded-2xl bg-[rgba(133,160,245,0.05)] lg:block" />
+				{/* Invisible anchor image for animation reference */}
+				<div
+					className="invisible hidden h-170 w-137 shrink-0 lg:block"
+					data-portrait-anchor="experience"
+				/>
 			</div>
 		</section>
 	)

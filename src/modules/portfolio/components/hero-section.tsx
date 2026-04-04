@@ -1,10 +1,15 @@
+"use client"
+
+import { useRef } from "react"
 import { LiquidGlass } from "~/shared/components/ui"
 import { cn } from "~/shared/utils"
 import { PORTFOLIO_DATA } from "../portfolio-constants"
 
 export function HeroSection() {
+	const anchorImageRef = useRef<HTMLDivElement>(null)
+
 	return (
-		<section className="relative flex min-h-screen w-full max-w-308 flex-col items-center justify-center gap-12 px-6 pt-32 pb-16 sm:gap-16 sm:px-12 sm:pt-36 md:gap-22 md:px-16 md:pt-24 lg:mx-auto lg:px-20 lg:pt-0 xl:px-24">
+		<section className="relative flex min-h-screen w-full max-w-308 flex-col items-center justify-center gap-12 px-6 pt-32 pb-16 sm:gap-16 sm:px-12 sm:pt-36 md:gap-22 md:px-16 md:pt-24 lg:mx-auto lg:gap-22 lg:px-20 xl:px-24">
 			{/* Gradient Title */}
 			<h1
 				className={cn(
@@ -60,14 +65,12 @@ export function HeroSection() {
 					<p className="font-medium text-2xl text-black">Software Skills</p>
 				</div>
 
-				{/* Image Card */}
-				<div className="h-77.5 w-full overflow-hidden rounded-2xl md:w-74">
-					<img
-						src="https://www.figma.com/api/mcp/asset/b5cfb36e-8791-4be3-827c-d274b08654e1"
-						alt="Designer"
-						className="h-full w-full object-cover"
-					/>
-				</div>
+				{/* Invisible anchor image for animation reference */}
+				<div
+					ref={anchorImageRef}
+					className="invisible h-77.5 w-full md:w-74 lg:h-165 lg:w-126"
+					data-portrait-anchor="hero"
+				/>
 			</div>
 		</section>
 	)

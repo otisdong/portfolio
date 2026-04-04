@@ -7,24 +7,13 @@ import { PORTFOLIO_DATA } from "../portfolio-constants"
 export function AboutSection() {
 	const { personal } = PORTFOLIO_DATA
 	const containerRef = useRef<HTMLElement>(null)
+	const anchorImageRef = useRef<HTMLDivElement>(null)
 
 	// Track scroll progress of this section
 	const { scrollYProgress } = useScroll({
 		target: containerRef,
 		offset: ["start start", "end start"],
 	})
-
-	// Image animations
-	const imageScale = useTransform(
-		scrollYProgress,
-		[0, 0.3, 0.7, 1],
-		[0.95, 1, 1, 0.98],
-	)
-	const imageOpacity = useTransform(
-		scrollYProgress,
-		[0, 0.2, 0.8, 1],
-		[0.7, 1, 1, 0.8],
-	)
 
 	// Bio container shrink animation
 	const bioScale = useTransform(
@@ -58,17 +47,12 @@ export function AboutSection() {
 	return (
 		<section ref={containerRef} className="relative h-[500vh]">
 			<div className="sticky top-0 mx-auto flex h-screen w-full max-w-308 flex-col items-center justify-center gap-8 px-6 py-16 sm:gap-16 sm:px-12 md:gap-20 md:px-16 lg:flex-row lg:gap-30 lg:px-20 xl:px-24">
-				{/* Image with scale animation */}
-				<motion.div
-					style={{ scale: imageScale, opacity: imageOpacity }}
-					className="relative h-80 w-full shrink-0 sm:h-120 md:h-140 lg:h-165 lg:w-126"
-				>
-					<img
-						src={personal.image}
-						alt={personal.name}
-						className="h-full w-full rounded-[40px] object-cover"
-					/>
-				</motion.div>
+				{/* Invisible anchor image for animation reference */}
+				<div
+					ref={anchorImageRef}
+					className="invisible h-80 w-full shrink-0 sm:h-120 md:h-140 lg:h-165 lg:w-126"
+					data-portrait-anchor="about"
+				/>
 
 				{/* Bio Text with word-by-word color reveal and container shrink */}
 				<motion.div
