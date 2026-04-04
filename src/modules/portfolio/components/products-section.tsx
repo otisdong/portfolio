@@ -6,14 +6,14 @@ export function ProductsSection() {
 	const { products } = PORTFOLIO_DATA
 
 	return (
-		<section className="px-6 py-24 sm:px-12 md:px-24 lg:px-60 xl:px-80">
+		<section className="mx-auto flex w-full max-w-308 flex-col items-center gap-16 px-6 py-24 sm:px-12 md:px-24 lg:px-0">
 			<div className="flex flex-col items-center gap-16">
 				{/* Header */}
-				<div className="flex w-full max-w-4xl flex-col items-center gap-6 text-center">
+				<div className="flex w-full max-w-244 flex-col items-center gap-6 text-center">
 					<h2
 						className={cn(
-							"font-medium text-4xl leading-tight sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] xl:leading-[88px]",
-							"bg-gradient-to-r from-white via-blue-100 to-blue-300",
+							"font-medium text-4xl leading-tight sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] xl:leading-22",
+							"bg-linear-to-r from-white via-blue-100 to-blue-300",
 							"bg-clip-text text-transparent",
 						)}
 					>

@@ -4,12 +4,12 @@ import { PORTFOLIO_DATA } from "../portfolio-constants"
 
 export function HeroSection() {
 	return (
-		<section className="relative flex flex-col items-center gap-20 px-6 py-12 sm:px-12 md:px-24 lg:px-60 xl:px-80">
+		<section className="relative flex w-full max-w-308 flex-col items-center gap-22 px-6 py-50 sm:px-12 md:px-24 lg:mx-auto lg:px-0">
 			{/* Gradient Title */}
 			<h1
 				className={cn(
-					"text-center font-medium text-4xl leading-tight sm:text-5xl md:text-6xl lg:text-7xl xl:text-[88px] xl:leading-[96px]",
-					"bg-gradient-to-r from-white via-blue-100 to-blue-300",
+					"text-center font-medium text-4xl leading-tight sm:text-5xl md:text-6xl lg:text-7xl xl:text-[88px] xl:leading-24",
+					"bg-linear-to-r from-white via-blue-100 to-blue-300",
 					"bg-clip-text text-transparent",
 				)}
 			>
@@ -17,9 +17,13 @@ export function HeroSection() {
 			</h1>
 
 			{/* Skills Grid */}
-			<div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+			<div className="flex w-full flex-col gap-4 md:flex-row">
 				{/* Design Skills Card */}
-				<div className="flex flex-col gap-2 rounded-2xl bg-white/5 p-6">
+				<LiquidGlass
+					variant="subtle"
+					rounded="2xl"
+					className="flex h-77.5 w-full flex-col gap-2 p-6 md:w-126"
+				>
 					<div className="flex flex-wrap gap-2">
 						<SkillTag>User flow</SkillTag>
 						<SkillTag>Wireframe</SkillTag>
@@ -36,10 +40,10 @@ export function HeroSection() {
 						<SkillTag>Content Video</SkillTag>
 						<SkillTag>Edit Video</SkillTag>
 					</div>
-				</div>
+				</LiquidGlass>
 
 				{/* Software Skills Card */}
-				<div className="flex flex-col justify-between rounded-2xl bg-gradient-to-b from-blue-50 to-blue-200 p-6">
+				<div className="flex h-77.5 w-full flex-col justify-between rounded-2xl bg-linear-to-b from-blue-50 to-blue-200 p-6 md:w-100">
 					<div className="flex flex-col gap-2">
 						{PORTFOLIO_DATA.skills.software.slice(0, 3).map((_, idx) => (
 							<div key={idx} className="flex gap-2">
@@ -57,7 +61,7 @@ export function HeroSection() {
 				</div>
 
 				{/* Image Card */}
-				<div className="h-[310px] overflow-hidden rounded-2xl">
+				<div className="h-77.5 w-full overflow-hidden rounded-2xl md:w-74">
 					<img
 						src="https://www.figma.com/api/mcp/asset/b5cfb36e-8791-4be3-827c-d274b08654e1"
 						alt="Designer"
@@ -75,7 +79,7 @@ interface SkillTagProps {
 
 function SkillTag({ children }: SkillTagProps) {
 	return (
-		<LiquidGlass variant="subtle" className="px-4 py-2">
+		<LiquidGlass variant="subtle" rounded="xl" className="px-4 py-2">
 			<span className="font-normal text-white text-xl">{children}</span>
 		</LiquidGlass>
 	)
