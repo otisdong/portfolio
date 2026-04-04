@@ -31,26 +31,26 @@ const buttonStyles = tv({
 			glass: [
 				"[--btn-bg:transparent] [--btn-fg:var(--color-fg)] [--btn-icon:var(--color-fg)] [--btn-outline:transparent] [--btn-ring:transparent]",
 				"inset-ring-0 isolate overflow-hidden",
-				// Liquid Glass System
-				"bg-[rgba(255,255,255,0.05)] backdrop-blur-[12px]",
-				"border border-[rgba(255,255,255,0.15)]",
-				"shadow-[0_0_0_1px_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.15)]",
-				// Inner gradient highlight
-				"before:absolute before:inset-0 before:-z-10",
-				"before:bg-[linear-gradient(135deg,rgba(255,255,255,0.12)_0%,transparent_60%)]",
-				"before:opacity-60",
-				// Top edge glow
-				"after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit]",
-				"after:bg-gradient-to-b after:from-white/25 after:via-transparent after:to-transparent",
-				// Noise texture
-				"viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E\")] [background-image:url(\"data:image/svg+xml,%3Csvg",
-				// Hover states
-				"hover:shadow-[0_0_0_1px_rgba(255,255,255,0.2),0_4px_16px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.2)]",
-				"hover:border-[rgba(255,255,255,0.25)]",
-				"hover:before:opacity-100",
+				// Gentle Liquid Glass System
+				"bg-[var(--glass-bg)]",
+				"[backdrop-filter:blur(var(--glass-blur))_saturate(1.8)_brightness(1.05)_contrast(1.01)]",
+				"[-webkit-backdrop-filter:blur(var(--glass-blur))_saturate(1.8)_brightness(1.05)_contrast(1.01)]",
+				// No hard borders - shadow-based edge definition
+				"border-none",
+				"shadow-[var(--glass-shadow)]",
+				// Spring-physics transition
+				"transition-all duration-500",
+				"[transition-timing-function:cubic-bezier(0.25,1,0.5,1)]",
+				"[transform-style:preserve-3d]",
+				// Hover: volumetric press + gentle refraction surge
+				"hover:bg-[var(--glass-bg-hover)]",
+				"hover:shadow-[var(--glass-shadow-hover)]",
+				"hover:-translate-y-1",
+				"hover:scale-[0.995]",
+				"hover:[backdrop-filter:blur(var(--glass-blur))_saturate(2.2)_brightness(1.08)_contrast(1.02)]",
+				"hover:[-webkit-backdrop-filter:blur(var(--glass-blur))_saturate(2.2)_brightness(1.08)_contrast(1.02)]",
 				// Pressed state
-				"pressed:scale-[0.98] active:scale-95",
-				"transition-all duration-300 ease-out",
+				"pressed:scale-[0.99] active:scale-[0.99]",
 			],
 		},
 		size: {

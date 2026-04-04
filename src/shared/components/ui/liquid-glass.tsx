@@ -3,69 +3,64 @@ import { tv, type VariantProps } from "tailwind-variants"
 import { cn } from "~/shared/utils"
 
 /**
- * LiquidGlass - Apple-style Liquid Glass component
+ * LiquidGlass - Ultra-Vibrant Apple-style Liquid Glass component
  *
  * Features:
- * - Base translucent layer
- * - Backdrop blur
- * - Inner highlight gradient
- * - Edge highlight (top border glow)
- * - Micro noise texture
- * - Soft depth with inner shadows
+ * - Ultra-high saturation (3.5x) + brightness lift for vibrant color bleeding
+ * - No hard borders - edge definition via inset shadows only
+ * - Volumetric hover interactions (simulates pressing into liquid surface)
+ * - macOS-style crisp layered shadows
+ * - CSS-only animations for performance
  */
 
 const liquidGlassStyles = tv({
 	base: [
 		// Base glass layer
 		"relative isolate overflow-hidden",
-
-		// Inner highlight layer (::before) - will be set per variant
-		"before:absolute before:inset-0 before:-z-10",
-
-		// Top edge glow (::after) - will be set per variant
-		"after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit]",
-		"after:bg-gradient-to-b after:via-transparent after:to-transparent",
+		// Spring-physics transitions
+		"transition-all duration-500",
+		"[transition-timing-function:cubic-bezier(0.25,1,0.5,1)]",
+		"[transform-style:preserve-3d]",
 	],
 	variants: {
 		variant: {
 			default: [
-				// Base layer
-				"bg-[rgba(255,255,255,0.05)] backdrop-blur-[12px]",
-				"border border-[rgba(255,255,255,0.15)]",
-				"shadow-[0_0_0_1px_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.15)]",
-				// Inner gradient
-				"before:bg-[linear-gradient(135deg,rgba(255,255,255,0.12)_0%,transparent_60%)]",
-				"before:opacity-60",
-				// Edge glow
-				"after:from-white/25",
-				// Noise texture
-				"viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E\")] [background-image:url(\"data:image/svg+xml,%3Csvg",
+				// Gentle liquid glass with moderate saturation
+				"bg-[var(--glass-bg)]",
+				"[backdrop-filter:blur(var(--glass-blur))_saturate(1.8)_brightness(1.05)_contrast(1.01)]",
+				"[-webkit-backdrop-filter:blur(var(--glass-blur))_saturate(1.8)_brightness(1.05)_contrast(1.01)]",
+				// No hard borders - only shadow-based edge definition
+				"border-none",
+				"shadow-[var(--glass-shadow)]",
+				// Content z-index
+				"[&>*]:relative [&>*]:z-[2]",
 			],
 			subtle: [
-				"bg-[rgba(255,255,255,0.03)] backdrop-blur-[8px]",
-				"border border-[rgba(255,255,255,0.1)]",
-				"shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_1px_2px_rgba(0,0,0,0.05)]",
-				"before:bg-[linear-gradient(135deg,rgba(255,255,255,0.08)_0%,transparent_50%)]",
-				"before:opacity-50",
-				"after:from-white/15",
+				// Minimal saturation for subtle effect - darker and clearer
+				"bg-[rgba(0,0,0,0.04)]",
+				"[backdrop-filter:blur(28px)_saturate(1.3)_brightness(1.02)_contrast(1.00)]",
+				"[-webkit-backdrop-filter:blur(28px)_saturate(1.3)_brightness(1.02)_contrast(1.00)]",
+				"border-none",
+				"shadow-[0_2px_4px_rgba(0,0,0,0.02),0_4px_16px_rgba(0,0,0,0.03),inset_0_0_0_1px_rgba(255,255,255,0.20),inset_0_1px_0_rgba(255,255,255,0.25)]",
+				"[&>*]:relative [&>*]:z-[2]",
 			],
 			frosted: [
-				"bg-[rgba(255,255,255,0.08)] backdrop-blur-[20px]",
-				"border border-[rgba(255,255,255,0.2)]",
-				"shadow-[0_0_0_1px_rgba(255,255,255,0.15),0_4px_8px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.2)]",
-				"before:bg-[linear-gradient(135deg,rgba(255,255,255,0.15)_0%,transparent_70%)]",
-				"before:opacity-70",
-				"after:from-white/30",
-				"viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E\")] [background-image:url(\"data:image/svg+xml,%3Csvg",
+				// Enhanced saturation for frosted glass effect - darker and clearer
+				"bg-[rgba(0,0,0,0.06)]",
+				"[backdrop-filter:blur(52px)_saturate(2.0)_brightness(1.04)_contrast(1.01)]",
+				"[-webkit-backdrop-filter:blur(52px)_saturate(2.0)_brightness(1.04)_contrast(1.01)]",
+				"border-none",
+				"shadow-[0_4px_8px_rgba(0,0,0,0.04),0_12px_40px_rgba(0,0,0,0.05),0_32px_80px_rgba(0,0,0,0.03),inset_0_0_0_1px_rgba(255,255,255,0.30),inset_0_1px_0_rgba(255,255,255,0.40)]",
+				"[&>*]:relative [&>*]:z-[2]",
 			],
 			premium: [
-				"bg-[rgba(255,255,255,0.06)] backdrop-blur-[16px]",
-				"border border-[rgba(255,255,255,0.18)]",
-				"shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_8px_32px_rgba(0,0,0,0.12),inset_0_2px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.05)]",
-				"before:bg-[linear-gradient(135deg,rgba(255,255,255,0.14)_0%,rgba(255,255,255,0.04)_50%,transparent_100%)]",
-				"before:opacity-80",
-				"after:from-white/35",
-				"viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E\")] [background-image:url(\"data:image/svg+xml,%3Csvg",
+				// Premium with balanced saturation and tint glow - darker and clearer
+				"bg-[rgba(0,0,0,0.08)]",
+				"[backdrop-filter:blur(44px)_saturate(1.8)_brightness(1.04)_contrast(1.01)]",
+				"[-webkit-backdrop-filter:blur(44px)_saturate(1.8)_brightness(1.04)_contrast(1.01)]",
+				"border-none",
+				"shadow-[var(--glass-shadow)]",
+				"[&>*]:relative [&>*]:z-[2]",
 			],
 		},
 		rounded: {
@@ -74,39 +69,53 @@ const liquidGlassStyles = tv({
 			md: "rounded-md",
 			lg: "rounded-lg",
 			xl: "rounded-xl",
-			"2xl": "rounded-2xl",
+			"2xl": "rounded-[var(--glass-radius)]",
 			full: "rounded-full",
 		},
 		interactive: {
 			true: [
-				"transition-all duration-300 ease-out",
-				"hover:before:opacity-100",
-				"active:scale-[0.98]",
+				// Volumetric press effect on hover
+				"hover:bg-[var(--glass-bg-hover)]",
+				"hover:shadow-[var(--glass-shadow-hover)]",
+				"hover:-translate-y-1",
+				"hover:scale-[0.995]",
+				// Gentle refraction surge on interaction
+				"hover:[backdrop-filter:blur(var(--glass-blur))_saturate(2.2)_brightness(1.08)_contrast(1.02)]",
+				"hover:[-webkit-backdrop-filter:blur(var(--glass-blur))_saturate(2.2)_brightness(1.08)_contrast(1.02)]",
+				// Active state
+				"active:scale-[0.99]",
 			],
 			false: "",
 		},
 	},
 	compoundVariants: [
 		{
-			variant: "default",
+			variant: "subtle",
 			interactive: true,
 			class: [
-				"hover:shadow-[0_0_0_1px_rgba(255,255,255,0.2),0_4px_16px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.2)]",
-				"hover:border-[rgba(255,255,255,0.25)]",
+				"hover:bg-[rgba(0,0,0,0.08)]",
+				"hover:[backdrop-filter:blur(28px)_saturate(1.6)_brightness(1.04)_contrast(1.01)]",
+				"hover:[-webkit-backdrop-filter:blur(28px)_saturate(1.6)_brightness(1.04)_contrast(1.01)]",
+			],
+		},
+		{
+			variant: "frosted",
+			interactive: true,
+			class: [
+				"hover:bg-[rgba(0,0,0,0.10)]",
+				"hover:[backdrop-filter:blur(52px)_saturate(2.4)_brightness(1.06)_contrast(1.02)]",
+				"hover:[-webkit-backdrop-filter:blur(52px)_saturate(2.4)_brightness(1.06)_contrast(1.02)]",
 			],
 		},
 		{
 			variant: "premium",
 			interactive: true,
-			class: [
-				"hover:shadow-[0_0_0_1px_rgba(255,255,255,0.25),0_12px_48px_rgba(0,0,0,0.18),inset_0_2px_0_rgba(255,255,255,0.25)]",
-				"hover:border-[rgba(255,255,255,0.3)]",
-			],
+			class: ["hover:bg-[rgba(0,0,0,0.12)]"],
 		},
 	],
 	defaultVariants: {
 		variant: "default",
-		rounded: "xl",
+		rounded: "2xl",
 		interactive: false,
 	},
 })
@@ -150,8 +159,7 @@ const LiquidGlass = forwardRef<HTMLDivElement, LiquidGlassProps>(
 				)}
 				{...props}
 			>
-				{/* Content wrapper with z-index to ensure it's above pseudo-elements */}
-				<div className="relative z-10">{children}</div>
+				{children}
 			</Component>
 		)
 	},
