@@ -5,7 +5,7 @@ export function ContactSection() {
 	const { personal } = PORTFOLIO_DATA
 
 	return (
-		<section className="relative mx-auto w-full max-w-308 px-6 py-24 sm:px-12 md:px-24 lg:px-0">
+		<section className="relative mx-auto w-full max-w-308 px-6 py-24 sm:px-12 md:px-16 lg:px-20 xl:px-24">
 			{/* Let's work together animated text */}
 			<div className="mb-18 flex justify-center">
 				<img

@@ -43,7 +43,7 @@ export function AboutSection() {
 	const bioContentY = useTransform(
 		scrollYProgress,
 		[0.1, 0.7], // Finish scrolling at 70% instead of 90%
-		[0, -800], // Scroll up 800px over the section
+		[0, -300], // Scroll up 800px over the section
 	)
 
 	// Split text into words
@@ -56,12 +56,12 @@ export function AboutSection() {
 	const totalWords = bioWords.length + bioSecondaryWords.length
 
 	return (
-		<section ref={containerRef} className="relative h-[200vh]">
-			<div className="sticky top-0 mx-auto flex h-screen w-full max-w-308 flex-col items-center justify-center gap-30 px-6 py-24 sm:px-12 md:px-24 lg:flex-row lg:px-0">
+		<section ref={containerRef} className="relative h-[500vh]">
+			<div className="sticky top-0 mx-auto flex h-screen w-full max-w-308 flex-col items-center justify-center gap-8 px-6 py-16 sm:gap-16 sm:px-12 md:gap-20 md:px-16 lg:flex-row lg:gap-30 lg:px-20 xl:px-24">
 				{/* Image with scale animation */}
 				<motion.div
 					style={{ scale: imageScale, opacity: imageOpacity }}
-					className="relative h-165 w-full shrink-0 lg:w-126"
+					className="relative h-80 w-full shrink-0 sm:h-120 md:h-140 lg:h-165 lg:w-126"
 				>
 					<img
 						src={personal.image}
@@ -73,15 +73,15 @@ export function AboutSection() {
 				{/* Bio Text with word-by-word color reveal and container shrink */}
 				<motion.div
 					style={{ scale: bioScale, opacity: bioContainerOpacity }}
-					className="relative flex h-165 max-h-[50vh] flex-col overflow-hidden lg:max-h-165"
+					className="relative flex h-auto max-h-[40vh] flex-col overflow-hidden sm:max-h-[45vh] md:max-h-[50vh] lg:h-165 lg:max-h-165"
 				>
 					{/* Scrolling content container */}
 					<motion.div
 						style={{ y: bioContentY }}
-						className="flex flex-col gap-8"
+						className="flex flex-col gap-4 sm:gap-6 md:gap-8"
 					>
 						{/* Primary bio with word-by-word reveal */}
-						<p className="text-lg leading-relaxed sm:text-xl md:text-2xl lg:text-3xl xl:text-[32px] xl:leading-[42px]">
+						<p className="text-base leading-relaxed sm:text-lg md:text-xl lg:text-2xl xl:text-[32px] xl:leading-10.5">
 							{bioWords.map((word, index) => (
 								<WordReveal
 									key={`bio-${index}`}
@@ -94,7 +94,7 @@ export function AboutSection() {
 						</p>
 
 						{/* Secondary bio with word-by-word reveal */}
-						<p className="text-lg leading-relaxed sm:text-xl md:text-2xl lg:text-3xl xl:text-[32px] xl:leading-[42px]">
+						<p className="text-base leading-relaxed sm:text-lg md:text-xl lg:text-2xl xl:text-[32px] xl:leading-10.5">
 							{bioSecondaryWords.map((word, index) => (
 								<WordReveal
 									key={`bio-secondary-${index}`}

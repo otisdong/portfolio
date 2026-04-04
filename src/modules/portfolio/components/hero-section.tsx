@@ -4,7 +4,7 @@ import { PORTFOLIO_DATA } from "../portfolio-constants"
 
 export function HeroSection() {
 	return (
-		<section className="relative flex w-full max-w-308 flex-col items-center gap-22 px-6 py-50 sm:px-12 md:px-24 lg:mx-auto lg:px-0">
+		<section className="relative flex min-h-screen w-full max-w-308 flex-col items-center justify-center gap-12 px-6 pt-32 pb-16 sm:gap-16 sm:px-12 sm:pt-36 md:gap-22 md:px-16 md:pt-24 lg:mx-auto lg:px-20 lg:pt-0 xl:px-24">
 			{/* Gradient Title */}
 			<h1
 				className={cn(

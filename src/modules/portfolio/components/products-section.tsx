@@ -6,7 +6,7 @@ export function ProductsSection() {
 	const { products } = PORTFOLIO_DATA
 
 	return (
-		<section className="mx-auto flex w-full max-w-308 flex-col items-center gap-16 px-6 py-24 sm:px-12 md:px-24 lg:px-0">
+		<section className="mx-auto flex w-full max-w-308 flex-col items-center gap-16 px-6 py-24 sm:px-12 md:px-16 lg:px-20 xl:px-24">
 			<div className="flex flex-col items-center gap-16">
 				{/* Header */}
 				<div className="flex w-full max-w-244 flex-col items-center gap-6 text-center">
