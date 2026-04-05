@@ -1,168 +1,289 @@
 "use client"
 
-import { motion, useScroll, useTransform } from "framer-motion"
-import { useEffect, useState } from "react"
+import { useGSAP } from "@gsap/react"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useRef } from "react"
 import { PORTFOLIO_DATA } from "../portfolio-constants"
 
-interface AnchorPosition {
-	left: number
-	top: number
-	width: number
-	height: number
-}
+gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 export function FloatingPortrait() {
-	const [heroPos, setHeroPos] = useState<AnchorPosition | null>(null)
-	const [aboutPos, setAboutPos] = useState<AnchorPosition | null>(null)
-	const [experiencePos, setExperiencePos] = useState<AnchorPosition | null>(
-		null,
-	)
+	const containerRef = useRef<HTMLDivElement>(null)
+	const frontImageRef = useRef<HTMLImageElement>(null)
+	const backImageRef = useRef<HTMLImageElement>(null)
 
-	// Track overall page scroll - MUST be called before any conditional returns
-	const { scrollYProgress } = useScroll()
+	// Dynamic animation that tracks ghost positions during scroll
+	useGSAP(() => {
+		if (!containerRef.current) return
 
-	// Update anchor positions on mount and resize only (not scroll to prevent jitter)
-	useEffect(() => {
-		const updatePositions = () => {
-			const heroAnchor = document.querySelector(
-				'[data-portrait-anchor="hero"]',
-			) as HTMLElement
-			const aboutAnchor = document.querySelector(
-				'[data-portrait-anchor="about"]',
-			) as HTMLElement
-			const experienceAnchor = document.querySelector(
-				'[data-portrait-anchor="experience"]',
-			) as HTMLElement
-
-			if (heroAnchor) {
-				const rect = heroAnchor.getBoundingClientRect()
-				setHeroPos({
-					left: rect.left + window.scrollX,
-					top: rect.top + window.scrollY,
-					width: rect.width,
-					height: rect.height,
-				})
-			}
-			if (aboutAnchor) {
-				const rect = aboutAnchor.getBoundingClientRect()
-				setAboutPos({
-					left: rect.left + window.scrollX,
-					top: rect.top + window.scrollY,
-					width: rect.width,
-					height: rect.height,
-				})
-			}
-			if (experienceAnchor) {
-				const rect = experienceAnchor.getBoundingClientRect()
-				setExperiencePos({
-					left: rect.left + window.scrollX,
-					top: rect.top + window.scrollY,
-					width: rect.width,
-					height: rect.height,
-				})
+		const getGhostPosition = (selector: string) => {
+			const element = document.querySelector(selector) as HTMLElement
+			if (!element) return null
+			const rect = element.getBoundingClientRect()
+			return {
+				left: rect.left,
+				top: rect.top,
+				width: rect.width,
+				height: rect.height,
 			}
 		}
 
-		// Initial update with delay to ensure DOM is ready
-		setTimeout(updatePositions, 100)
-		window.addEventListener("resize", updatePositions)
+		const getContainerLeftEdge = () => {
+			const aboutSection = document
+				.querySelector('[data-portrait-anchor="about"]')
+				?.closest("section")
+			if (!aboutSection) return 0
 
-		return () => {
-			window.removeEventListener("resize", updatePositions)
+			const stickyDiv = aboutSection.querySelector(".sticky") as HTMLElement
+			if (!stickyDiv) return 0
+
+			const rect = stickyDiv.getBoundingClientRect()
+			const computedStyle = window.getComputedStyle(stickyDiv)
+			const paddingLeft = Number.parseFloat(computedStyle.paddingLeft) || 0
+
+			return rect.left + paddingLeft
 		}
+
+		const getAboutPosition = () => {
+			const ghost = getGhostPosition('[data-portrait-anchor="about"]')
+			if (!ghost) return null
+
+			const containerLeft = getContainerLeftEdge()
+			const viewportHeight = window.innerHeight
+
+			return {
+				left: containerLeft,
+				top: (viewportHeight - ghost.height) / 2,
+				width: ghost.width,
+				height: ghost.height,
+			}
+		}
+
+		const getExperiencePosition = () => {
+			const ghost = getGhostPosition('[data-portrait-anchor="experience"]')
+			if (!ghost) return null
+
+			const experienceSection = document
+				.querySelector('[data-portrait-anchor="experience"]')
+				?.closest("section")
+			if (!experienceSection) return ghost
+
+			const stickyDiv = experienceSection.querySelector(
+				".sticky",
+			) as HTMLElement
+			if (!stickyDiv) return ghost
+
+			const containerRect = stickyDiv.getBoundingClientRect()
+			const computedStyle = window.getComputedStyle(stickyDiv)
+			const paddingRight = Number.parseFloat(computedStyle.paddingRight) || 0
+
+			const viewportHeight = window.innerHeight
+
+			return {
+				left: containerRect.right - ghost.width - paddingRight,
+				top: (viewportHeight - ghost.height) / 2,
+				width: ghost.width,
+				height: ghost.height,
+			}
+		}
+
+		// Get hero section to calculate timeline
+		const heroSection = document
+			.querySelector('[data-portrait-anchor="hero"]')
+			?.closest("section")
+		const aboutSection = document
+			.querySelector('[data-portrait-anchor="about"]')
+			?.closest("section")
+		const experienceSection = document
+			.querySelector('[data-portrait-anchor="experience"]')
+			?.closest("section")
+
+		if (!heroSection || !aboutSection || !experienceSection) return
+
+		// Calculate scroll progress breakpoints based on section positions
+		const aboutStart = aboutSection.offsetTop / document.body.scrollHeight
+		const experienceStart =
+			experienceSection.offsetTop / document.body.scrollHeight
+		const experienceEnd =
+			(experienceSection.offsetTop + experienceSection.offsetHeight) /
+			document.body.scrollHeight
+
+		// Initialize with hero position after a delay to ensure layout is ready
+		setTimeout(() => {
+			const initialHero = getGhostPosition('[data-portrait-anchor="hero"]')
+			if (initialHero && containerRef.current) {
+				// Set initial position
+				gsap.set(containerRef.current, {
+					left: initialHero.left,
+					top: initialHero.top,
+					width: initialHero.width,
+					height: initialHero.height,
+					opacity: 0,
+					y: 0,
+				})
+
+				// Fade in
+				gsap.to(containerRef.current, {
+					opacity: 1,
+					duration: 0.8,
+					ease: "power2.out",
+					delay: 0.2,
+				})
+			}
+		}, 200)
+
+		ScrollTrigger.create({
+			trigger: "body",
+			start: "top top",
+			end: "bottom bottom",
+			scrub: 1,
+			onUpdate: (self) => {
+				const progress = self.progress
+				const container = containerRef.current
+				if (!container) return
+
+				const hero = getGhostPosition('[data-portrait-anchor="hero"]')
+				const about = getAboutPosition()
+				const experience = getExperiencePosition()
+
+				if (!hero || !about || !experience) return
+
+				// Phase 1: Hero → About transition (0% → aboutStart)
+				if (progress < aboutStart) {
+					const transitionProgress = progress / aboutStart
+					gsap.set(container, {
+						left: gsap.utils.interpolate(
+							hero.left,
+							about.left,
+							transitionProgress,
+						),
+						top: gsap.utils.interpolate(
+							hero.top,
+							about.top,
+							transitionProgress,
+						),
+						width: gsap.utils.interpolate(
+							hero.width,
+							about.width,
+							transitionProgress,
+						),
+						height: gsap.utils.interpolate(
+							hero.height,
+							about.height,
+							transitionProgress,
+						),
+						opacity: 1,
+						rotateY: 0,
+					})
+				}
+				// Phase 2: Stay at About position (aboutStart → experienceStart)
+				else if (progress >= aboutStart && progress < experienceStart) {
+					gsap.set(container, {
+						left: about.left,
+						top: about.top,
+						width: about.width,
+						height: about.height,
+						opacity: 1,
+						rotateY: 0,
+					})
+				}
+				// Phase 3: About → Experience flip transition (experienceStart → experienceStart + 0.1)
+				else if (
+					progress >= experienceStart &&
+					progress < experienceStart + 0.1
+				) {
+					const transitionProgress = (progress - experienceStart) / 0.1
+					gsap.set(container, {
+						left: gsap.utils.interpolate(
+							about.left,
+							experience.left,
+							transitionProgress,
+						),
+						top: gsap.utils.interpolate(
+							about.top,
+							experience.top,
+							transitionProgress,
+						),
+						width: gsap.utils.interpolate(
+							about.width,
+							experience.width,
+							transitionProgress,
+						),
+						height: gsap.utils.interpolate(
+							about.height,
+							experience.height,
+							transitionProgress,
+						),
+						opacity: 1,
+						rotateY: transitionProgress * 180,
+					})
+				}
+				// Phase 4: Stay at Experience position (experienceStart + 0.1 → experienceEnd - 0.05)
+				else if (
+					progress >= experienceStart + 0.1 &&
+					progress < experienceEnd - 0.05
+				) {
+					gsap.set(container, {
+						left: experience.left,
+						top: experience.top,
+						width: experience.width,
+						height: experience.height,
+						opacity: 1,
+						rotateY: 180,
+					})
+				}
+				// Phase 5: Fade out upward (experienceEnd - 0.05 → experienceEnd)
+				else if (progress >= experienceEnd - 0.05) {
+					const fadeProgress = (progress - (experienceEnd - 0.05)) / 0.05
+					gsap.set(container, {
+						left: experience.left,
+						top: experience.top,
+						width: experience.width,
+						height: experience.height,
+						opacity: 1 - fadeProgress,
+						rotateY: 180,
+						y: -100 * fadeProgress,
+					})
+				}
+			},
+		})
 	}, [])
 
-	// Calculate position deltas with fallback values
-	// const heroToAboutX = heroPos && aboutPos ? aboutPos.left - heroPos.left : 0
-	// const heroToAboutY = heroPos && aboutPos ? aboutPos.top - heroPos.top : 0
-	// const aboutToExpX =
-	// 	heroPos && experiencePos ? experiencePos.left - heroPos.left : 0
-	// const aboutToExpY =
-	// 	heroPos && experiencePos ? experiencePos.top - heroPos.top : 0
-
-	// Phase 1: Hero → About (scroll 10% to 30%)
-	// Phase 2: About → Experience (scroll 40% to 60%)
-	const left = useTransform(
-		scrollYProgress,
-		[0.1, 0.3, 0.4, 0.6],
-		[
-			heroPos?.left ?? 0,
-			aboutPos?.left ?? 0,
-			aboutPos?.left ?? 0,
-			experiencePos?.left ?? 0,
-		],
-	)
-	const top = useTransform(
-		scrollYProgress,
-		[0.1, 0.3, 0.4, 0.6],
-		[
-			heroPos?.top ?? 0,
-			aboutPos?.top ?? 0,
-			aboutPos?.top ?? 0,
-			experiencePos?.top ?? 0,
-		],
-	)
-
-	// Size animation through all phases
-	const width = useTransform(
-		scrollYProgress,
-		[0.1, 0.3, 0.4, 0.6],
-		[
-			heroPos?.width ?? 0,
-			aboutPos?.width ?? 0,
-			aboutPos?.width ?? 0,
-			experiencePos?.width ?? 0,
-		],
-	)
-	const height = useTransform(
-		scrollYProgress,
-		[0.1, 0.3, 0.4, 0.6],
-		[
-			heroPos?.height ?? 0,
-			aboutPos?.height ?? 0,
-			aboutPos?.height ?? 0,
-			experiencePos?.height ?? 0,
-		],
-	)
-
-	// Opacity fade in and out
-	const opacity = useTransform(scrollYProgress, [0, 0.05, 0.9, 1], [0, 1, 1, 0])
-
-	// Border radius animation
-	const borderRadius = useTransform(
-		scrollYProgress,
-		[0.1, 0.3, 0.4, 0.6],
-		["16px", "16px", "16px", "16px"],
-	)
-
-	// Flip animation during transition to experience
-	const rotateY = useTransform(scrollYProgress, [0.4, 0.5, 0.6], [0, 180, 360])
-
-	// Early return AFTER all hooks
-	if (!heroPos || !aboutPos || !experiencePos) {
-		return null
-	}
-
 	return (
-		<motion.div
+		<div
+			ref={containerRef}
 			style={{
-				position: "absolute",
-				left,
-				top,
-				width,
-				height,
-				opacity,
-				borderRadius,
-				rotateY,
+				position: "fixed",
+				borderRadius: "16px",
 				zIndex: 40,
+				transformStyle: "preserve-3d",
 			}}
 			className="overflow-hidden"
 		>
+			{/* Front face - original portrait */}
 			<img
+				ref={frontImageRef}
 				src={PORTFOLIO_DATA.personal.image}
 				alt={PORTFOLIO_DATA.personal.name}
 				className="h-full w-full object-cover"
+				style={{
+					position: "absolute",
+					backfaceVisibility: "hidden",
+				}}
 			/>
-		</motion.div>
+			{/* Back face - placeholder */}
+			<img
+				ref={backImageRef}
+				src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1000&fit=crop"
+				alt="Back portrait"
+				className="h-full w-full object-cover"
+				style={{
+					position: "absolute",
+					backfaceVisibility: "hidden",
+					transform: "rotateY(180deg)",
+				}}
+			/>
+		</div>
 	)
 }
