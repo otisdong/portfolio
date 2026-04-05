@@ -1,17 +1,58 @@
 "use client"
 
+import { useGSAP } from "@gsap/react"
+import gsap from "gsap"
 import { useRef } from "react"
 import { LiquidGlass } from "~/shared/components/ui"
 import { cn } from "~/shared/utils"
 import { PORTFOLIO_DATA } from "../portfolio-constants"
 
+gsap.registerPlugin(useGSAP)
+
 export function HeroSection() {
 	const anchorImageRef = useRef<HTMLDivElement>(null)
+	const titleRef = useRef<HTMLHeadingElement>(null)
+	const designCardRef = useRef<HTMLDivElement>(null)
+	const softwareCardRef = useRef<HTMLDivElement>(null)
+
+	// Sequential fade-in animations
+	useGSAP(() => {
+		// Set initial opacity to 0
+		gsap.set(
+			[titleRef.current, designCardRef.current, softwareCardRef.current],
+			{
+				opacity: 0,
+			},
+		)
+
+		// Stagger fade-in with delays
+		gsap.to(titleRef.current, {
+			opacity: 1,
+			duration: 0.8,
+			ease: "power2.out",
+			delay: 0.4,
+		})
+
+		gsap.to(designCardRef.current, {
+			opacity: 1,
+			duration: 0.8,
+			ease: "power2.out",
+			delay: 0.8,
+		})
+
+		gsap.to(softwareCardRef.current, {
+			opacity: 1,
+			duration: 0.8,
+			ease: "power2.out",
+			delay: 1.2,
+		})
+	}, [])
 
 	return (
 		<section className="relative flex min-h-screen w-full max-w-308 flex-col items-center justify-center gap-12 px-6 pt-32 pb-16 sm:gap-16 sm:px-12 sm:pt-36 md:gap-22 md:px-16 md:pt-24 lg:mx-auto lg:gap-22 lg:px-20 xl:px-24">
 			{/* Gradient Title */}
 			<h1
+				ref={titleRef}
 				className={cn(
 					"text-center font-medium text-4xl leading-tight sm:text-5xl md:text-6xl lg:text-7xl xl:text-[88px] xl:leading-24",
 					"bg-linear-to-r from-white via-blue-100 to-blue-300",
@@ -25,6 +66,7 @@ export function HeroSection() {
 			<div className="flex w-full flex-col gap-4 md:flex-row">
 				{/* Design Skills Card */}
 				<LiquidGlass
+					ref={designCardRef}
 					variant="subtle"
 					rounded="2xl"
 					className="flex h-77.5 w-full flex-col gap-2 p-6 md:w-126"
@@ -48,7 +90,10 @@ export function HeroSection() {
 				</LiquidGlass>
 
 				{/* Software Skills Card */}
-				<div className="flex h-77.5 w-full flex-col justify-between rounded-2xl bg-linear-to-b from-blue-50 to-blue-200 p-6 md:w-100">
+				<div
+					ref={softwareCardRef}
+					className="flex h-77.5 w-full flex-col justify-between rounded-2xl bg-linear-to-b from-blue-50 to-blue-200 p-6 md:w-100"
+				>
 					<div className="flex flex-col gap-2">
 						{PORTFOLIO_DATA.skills.software.slice(0, 3).map((_, idx) => (
 							<div key={idx} className="flex gap-2">
@@ -68,7 +113,7 @@ export function HeroSection() {
 				{/* Invisible anchor image for animation reference */}
 				<div
 					ref={anchorImageRef}
-					className="invisible h-77.5 w-full md:w-74 lg:h-165 lg:w-126"
+					className="invisible h-77.5 w-full md:w-74 lg:w-126"
 					data-portrait-anchor="hero"
 				/>
 			</div>

@@ -11,7 +11,7 @@ export function ContactSection() {
 				<img
 					src="https://www.figma.com/api/mcp/asset/21e3aa03-8839-4e44-96af-f2651be1683f"
 					alt="Let's work together"
-					className="h-30"
+					className="h-30 object-contain"
 				/>
 			</div>
 
