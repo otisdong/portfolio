@@ -17,6 +17,9 @@ export function FloatingPortrait() {
 	useGSAP(() => {
 		if (!containerRef.current) return
 
+		// Check if desktop (lg breakpoint = 1024px)
+		const isDesktop = () => window.innerWidth >= 1024
+
 		const getGhostPosition = (selector: string) => {
 			const element = document.querySelector(selector) as HTMLElement
 			if (!element) return null
@@ -49,6 +52,12 @@ export function FloatingPortrait() {
 			const ghost = getGhostPosition('[data-portrait-anchor="about"]')
 			if (!ghost) return null
 
+			// On mobile: use ghost position (stays on top of content)
+			// On desktop: move to left edge
+			if (!isDesktop()) {
+				return ghost
+			}
+
 			const containerLeft = getContainerLeftEdge()
 			const viewportHeight = window.innerHeight
 
@@ -63,6 +72,11 @@ export function FloatingPortrait() {
 		const getExperiencePosition = () => {
 			const ghost = getGhostPosition('[data-portrait-anchor="experience"]')
 			if (!ghost) return null
+
+			// On mobile: use ghost position (stays on top of content)
+			if (!isDesktop()) {
+				return ghost
+			}
 
 			const experienceSection = document
 				.querySelector('[data-portrait-anchor="experience"]')
