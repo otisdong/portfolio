@@ -41,6 +41,10 @@ export function AboutSection() {
 			const containerHeight = bioContainer.clientHeight
 			const scrollDistance = contentHeight - containerHeight
 
+			// Responsive scrub value - slower on mobile
+			const isMobile = window.innerWidth < 768
+			const scrubValue = isMobile ? 2 : 1
+
 			// Bio container scale and opacity animation
 			gsap
 				.timeline({
@@ -48,7 +52,7 @@ export function AboutSection() {
 						trigger: containerRef.current,
 						start: "top top",
 						end: "bottom top",
-						scrub: 1,
+						scrub: scrubValue,
 					},
 				})
 				.fromTo(
@@ -74,24 +78,26 @@ export function AboutSection() {
 						trigger: containerRef.current,
 						start: "top+=20% top",
 						end: "top+=90% top",
-						scrub: 1,
+						scrub: scrubValue,
 					},
 				},
 			)
 
 			// Word-by-word reveal animations - start at 10%, end at 90%
+			// Slower reveal on mobile with longer duration per word
+			const revealDuration = isMobile ? 0.05 : 0.03
 			const words = containerRef.current.querySelectorAll(".word-reveal")
 			words.forEach((word, index) => {
 				// Start at 10%, end at 90% (80% duration)
 				const startProgress = 0.1 + (index / totalWords) * 0.8
-				const endProgress = startProgress + 0.03 // Increased from 0.01 to 0.03 for slower fill
+				const endProgress = startProgress + revealDuration
 
 				gsap.timeline({
 					scrollTrigger: {
 						trigger: containerRef.current,
 						start: "top top",
 						end: "bottom top",
-						scrub: 1,
+						scrub: scrubValue,
 						onUpdate: (self) => {
 							const progress = self.progress
 							if (progress < startProgress) {
@@ -128,7 +134,7 @@ export function AboutSection() {
 	)
 
 	return (
-		<section ref={containerRef} className="relative h-[500vh]">
+		<section ref={containerRef} className="relative h-[600vh] md:h-[500vh]">
 			<div className="sticky top-0 mx-auto flex h-screen w-full max-w-308 flex-col items-center justify-center gap-8 px-6 py-16 sm:gap-16 sm:px-12 md:gap-20 md:px-16 lg:flex-row lg:gap-30 lg:px-20 xl:px-24">
 				{/* Invisible anchor image for animation reference */}
 				<div
